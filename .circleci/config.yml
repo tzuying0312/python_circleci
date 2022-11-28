@@ -36,8 +36,8 @@ jobs:
       - run:
           name: Deploying
           command: |
-            git clone https://github.com/tzuying0312/learn_circleci.git
-            cd learn_circleci
+            git clone https://github.com/tzuying0312/python_circleci.git
+            cd python_circleci
             git checkout deploy-to-eb
             eb deploy env-dev
 
