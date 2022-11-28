@@ -37,11 +37,40 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest test_application.py
+  
+    aws-deploy:
+    executor: aws-cli/default
+    steps:
+      - run:
+          name: Making AWS profile
+          command: |
+            mkdir  ~/.aws
+            echo -e "[default]\n" > ~/.aws/config
+            echo -e "[default]\naws_access_key_id=$AWS_ACCESS_KEY\naws_secret_access_key=$AWS_SECRET_KEY\n" > ~/.aws/credentials
+
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run:
+          name: Deploying
+          command: |
+            git clone https://github.com/tzuying0312/learn_circleci.git
+            cd learn_circleci
+            git checkout deploy-to-eb
+            eb deploy env-dev
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  sample: 
     jobs:
       - build-and-test
+      - aws-deploy:
+          filters:
+            branches: # 表示只在 branch 是 deploy-to-eb 時執行 commands
+              only:
+                - deploy-to-eb
