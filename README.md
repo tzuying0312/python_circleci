@@ -34,7 +34,7 @@
     if __name__ == '__main__':
         init_api()
     ```
-      > 透過 `python application.py` 來開啟 http://127.0.0.1:5000，看見 Hello World! 表示成功。
+      > 透過 `python application.py` 來開啟 http://127.0.0.1:5000 ，看見 Hello World! 表示成功。
     
 3. 在 `python_circleci/` 路徑底下建立 `test_application.py` 測試程式。
 	```python
@@ -358,7 +358,7 @@
 
 7. 試著改寫 `application.py` 看是否 push 完後 AWS EB 也自動部署成功，譬如改成 `Hello World! 11/28`
 
-	``` python=
+	``` python
 	from flask import Flask
 	application = Flask(__name__)
 
