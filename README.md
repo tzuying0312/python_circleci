@@ -1,7 +1,7 @@
 # CircleCI
 
 ## Table of contents
-- [持續整合](#持續整合)
+- [持續整合（CircleCI）](#持續整合)
   * [建立專案](#建立專案)
   * [上傳至 Github](#上傳至-Github)
   * [建立 CircleCI 專案](#建立-CircleCI-專案)
@@ -103,22 +103,17 @@
 
     ![](https://i.imgur.com/BgGaWgL.png)
 
-4. 會挑出預設的 yml，以此來改寫某些地方，這邊只要修正第 13 行，將原先的 `pytest` 改成 `pytest test_application.py`，就是執行我們測試程式。
+4. 會挑出預設的 yml，以此來改寫某些地方，這邊只要將原先的 `pytest` 改成 `pytest test_application.py`，就是執行我們測試程式。
 
 	```yml
-		steps:
-		  # 第一步
-		  - checkout
-		  # 第二步安裝環境
-		  - python/install-packages:
-			  pkg-manager: pip
-			  # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
-			  # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
-		  # 第三步執行 flask 的測試
-		  - run:
-			  name: Run tests
-			  # This assumes pytest is installed via the install-package step above
-			  command: pytest test_application.py
+        steps:
+          - checkout # 第一步
+          - python/install-packages: # 第二步安裝環境
+              pkg-manager: pip
+          - run: # 第三步執行 flask 的測試程式
+              name: Run tests
+              command:
+                pytest test_application.py 
 	```
 
 5. 完成後按 `Commit and Run`。
@@ -148,21 +143,21 @@
 
 ## 建立部署環境
 ### 申請 access key 及 secret key
-1. 至 https://aws.amazon.com/tw/?nc2=h_lg 註冊或登入
-2. 在左上搜尋的地方打上 `IAM` 搜尋，點擊第一個
+1. 至 https://aws.amazon.com/tw/?nc2=h_lg 註冊或登入。
+2. 在左上搜尋的地方打上 `IAM` 搜尋，點擊第一個。
 	
 	![](https://i.imgur.com/n5Kllfr.png)
 
-3. `使用者 > 新增使用者`
+3. `使用者 > 新增使用者`。
 
 	![](https://i.imgur.com/ywi7gZL.png)
 
-4. 輸入`使用者名稱`和勾選`存取金鑰`，完成後點擊`下一個：許可`
+4. 輸入`使用者名稱`和勾選`存取金鑰`，完成後點擊`下一個：許可`。
 
 	![](https://i.imgur.com/zZg8Spi.png)
 
 
-5. `直接連結現有政策` > 搜尋以下 3 個 > 勾選並勾選起來 > `下一個：標籤`
+5. `直接連結現有政策` > 搜尋以下 3 個 > 勾選並勾選起來 > `下一個：標籤`。
 
 	- `AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy`
 	- `AWSCodeCommitFullAccess`
@@ -170,31 +165,31 @@
 
 	![](https://i.imgur.com/vt1t088.png)
 
-6. 點`下一個：檢閱`
+6. 點`下一個：檢閱`。
 
 	![](https://i.imgur.com/qFM6KiZ.png)
 
-7. 點`建立使用者`
+7. 點`建立使用者`。
 
 	![](https://i.imgur.com/WsQYxjG.png)
 
 
-8. 完成後，獲得 `Access key ID` 和 `Secret Access key`，將兩個記下來
+8. 完成後，獲得 `Access key ID` 和 `Secret Access key`，將兩個記下來。
 
 	![](https://i.imgur.com/B2iu46y.png)
 
 ### 在本地端設定 Elastic Beanstalk
-1. 首先要先安裝 AWS 的 command line tool
+1. 首先要先安裝 AWS 的 command line tool。
 	- `pip install awscli`  安裝 awscli
 	- `aws --version` 確認版本
 
-2. 接著建立憑證，讓我們可以從本機的終端機來對 AWS 做操作
+2. 接著建立憑證，讓我們可以從本機的終端機來對 AWS 做操作。
 	- `aws configure` # 建立憑證
-	- 會說要輸入 `Access key ID` 和 `Secret Access key `，輸入剛剛記錄下來的
+	- 會說要輸入 `Access key ID` 和 `Secret Access key `，輸入剛剛記錄下來的。
 	
 	![](https://i.imgur.com/txNxP2E.png)
 
-3. 建立 Elastic Beanstalk 環境，此步驟完成後會發現多了 `.elasticbeanstalk/` 的資料夾
+3. 建立 Elastic Beanstalk 環境，此步驟完成後會發現多了 `.elasticbeanstalk/` 的資料夾。
 	- `cd Desktop/DevOps/python_circleci/` 切換到專案路徑底下
 	- `eb init` 建立一個環境依序設定或直接輸入下列建立
 	- `eb init -p python-3.7 python_circleci --region us-east-2`
@@ -215,15 +210,15 @@
 		![](https://i.imgur.com/by7XNHb.png)
 
 		
-4. 除了終端機外，也可以在 AWS 左上角搜尋 `Elastic Beanstalk`，點第一個進入查看
+4. 除了終端機外，也可以在 AWS 左上角搜尋 `Elastic Beanstalk`，點第一個進入查看。
 	
 	![](https://i.imgur.com/2nZGAxk.png)
 
-5.  右上角 Regions 清單中選取剛剛建立 AWS 區域 （us-east-2）> `環境` > `env-dev` 來查看，確認是否正在建立
+5.  右上角 Regions 清單中選取剛剛建立 AWS 區域 （us-east-2）> `環境` > `env-dev` 來查看，確認是否正在建立。
 
 	![](https://i.imgur.com/Cw6GNlJ.png)
 
-6. 完成後，將本機的程式碼部署到 aws
+6. 完成後，將本機的程式碼部署到 aws。
 	
 	`eb deploy`
 
@@ -231,7 +226,7 @@
     
 	![](https://i.imgur.com/dhmcyyF.png)
 
-7. 開啟瀏覽器，看到 `Hello World!` 就表示已成功將本地的 code 成功部署至 EB
+7. 開啟瀏覽器，看到 `Hello World!` 就表示已成功將本地的 code 成功部署至 EB。
 
 	`eb open`
 	
@@ -241,24 +236,24 @@
 ## 持續部署
 ### 在 CircleCI 中新增環境變數
 
-1. `Project` > `...` > `Project Settings`
+1. `Project` > `...` > `Project Settings`。
 	
 	![](https://i.imgur.com/U1pMBxr.png)
 
-2. `Environment Variables` > `Add Environment Variable`
+2. `Environment Variables` > `Add Environment Variable`。
 
 	![](https://i.imgur.com/7HvjX82.png)
 
-3. 增加 `AWS_REGION`, `AWS_ACCESS_KEY` 和 `AWS_SECRET_KEY`
+3. 增加 `AWS_REGION`, `AWS_ACCESS_KEY` 和 `AWS_SECRET_KEY`。
 
 	![](https://i.imgur.com/xUXJJ56.png)
 
 ### 修改本機端的專案
-1. 新開一個 branch
+1. 新開一個 branch。
 	
 	`git checkout -b deploy-to-eb`
 
-2. 在 .gitignore 中加入 `!.elasticbeanstalk/config.yml`，表示不能 ignore 該檔案
+2. 在 .gitignore 中加入 `!.elasticbeanstalk/config.yml`，表示不能 ignore 該檔案。
 
 	```
 	# .gitignore
@@ -272,17 +267,7 @@
 	!.elasticbeanstalk/config.yml
 	```
 
-3. 在 requirments.txt 加入 awsebcli，表示要安裝該套件
-
-	```
-	# requirments.txt
-	Flask==2.2.2
-	pytest==7.1.1
-	requests==2.27.1
-	awsebcli
-	```
-
-4. 修改 `.circleci/config.yml`
+3. 修改 `.circleci/config.yml`。
 
 	```yml
     version: 2.1
@@ -329,7 +314,7 @@
                 eb deploy env-dev
 
     workflows:
-      sample: 
+      sample: # workflows 的名字
         jobs:
           - build-and-test
           - aws-deploy:
@@ -340,13 +325,13 @@
 
 	```
 
-5. Push 到 Github
+4. Push 到 Github。
 	- `git add . `
 	- `git commit -m "setting env-dev circleci"`
 	- `git push --set-upstream origin deploy-to-eb`
 
 
-6. 至 CircleCI 和 AWS EB 中查看是否成功
+5. 至 CircleCI 和 AWS EB 中查看是否成功。
 	- CircleCI Success
 
 		![](https://i.imgur.com/Nviobi0.png)
@@ -356,7 +341,7 @@
 		![](https://i.imgur.com/fdfZ22n.png)
 
 
-7. 試著改寫 `application.py` 看是否 push 完後 AWS EB 也自動部署成功，譬如改成 `Hello World! 11/28`
+6. 試著改寫 `application.py` 看是否 push 完後 AWS EB 也自動部署成功，譬如改成 `Hello World! 11/28`。
 
 	``` python
 	from flask import Flask
@@ -373,7 +358,7 @@
 		init_api()
 	```
 
-8. 完成！
+7. 完成！
 
     ![](https://i.imgur.com/H9bk1EZ.png)
 
